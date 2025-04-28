@@ -36,8 +36,6 @@ else
   fi
 fi
 
-# testing this
-source deactivate
 # Proceed with setting up environment and running Streamlit
 python3 -m venv venv
 source venv/bin/activate
@@ -45,5 +43,3 @@ pip install --timeout=60 -r requirements.txt
 
 echo "Running Streamlit application: $SCRIPT_TO_RUN"
 streamlit run "$SCRIPT_TO_RUN"
-
-
