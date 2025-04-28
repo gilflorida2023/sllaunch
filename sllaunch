@@ -1,5 +1,49 @@
 #!/usr/bin/env bash
+
+# Define the default script names
+STREAMLIT_APP="streamlit_app.py"
+APP="app.py"
+
+# Variable to hold the script to execute
+SCRIPT_TO_RUN=""
+
+# Check if a specific script name is provided as an argument
+if [ "$#" -eq 1 ]; then
+  SCRIPT_TO_RUN="$1"
+  # Check if the provided script exists
+  if [ ! -f "$SCRIPT_TO_RUN" ]; then
+    echo "Error: Specified script '$SCRIPT_TO_RUN' not found."
+    exit 1
+  fi
+else
+  # No argument provided, check for default files
+
+  # Check if both files exist
+  if [ -f "$STREAMLIT_APP" ] && [ -f "$APP" ]; then
+    echo "Error: Ambiguous execution requested. Both '$STREAMLIT_APP' and '$APP' exist."
+    echo "Please specify which script to run, e.g., './sllaunch app.py'"
+    exit 1
+  elif [ -f "$STREAMLIT_APP" ]; then
+    # Only streamlit_app.py exists
+    SCRIPT_TO_RUN="$STREAMLIT_APP"
+  elif [ -f "$APP" ]; then
+    # Only app.py exists
+    SCRIPT_TO_RUN="$APP"
+  else
+    # Neither file exists
+    echo "Error: No Streamlit application file found ('$STREAMLIT_APP' or '$APP')."
+    exit 1
+  fi
+fi
+
+# testing this
+source deactivate
+# Proceed with setting up environment and running Streamlit
 python3 -m venv venv
 source venv/bin/activate
 pip install --timeout=60 -r requirements.txt
-streamlit run app.py
+
+echo "Running Streamlit application: $SCRIPT_TO_RUN"
+streamlit run "$SCRIPT_TO_RUN"
+
+
